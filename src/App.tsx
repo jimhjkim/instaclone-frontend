@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useReactiveVar } from '@apollo/client';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
+import styled, { ThemeProvider } from 'styled-components';
+import { darkModeVar, isLoggedInVar } from './apollo';
+import Home from './screens/Home';
+import Login from './screens/Login';
+import NotFound from './screens/NotFound';
+import { darkTheme, GlobalStyles, lightTheme } from './styles';
+
+interface IContainerProps {
+  floating: boolean;
+}
+
+const Container = styled.div<IContainerProps>`
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.fontColor};
+  box-shadow: ${(props) => (props.floating ? '10px' : '')};
+`;
 
 function App() {
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const isDarkMode = useReactiveVar(darkModeVar);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyles />
+      <Container floating={true}>
+        <Router>
+          <Routes>
+            <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
+            <Route element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/" />}></Route>
+          </Routes>
+        </Router>
+      </Container>
+    </ThemeProvider>
   );
 }
 

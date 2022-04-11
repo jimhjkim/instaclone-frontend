@@ -9,3 +9,6 @@ Instagram clone frontend.
 - [x] Architecture
 - [x] Styles
 - [ ] Log in / Sign up
+- [ ] Feed
+- [ ] Profile
+- [ ] See Hashtag

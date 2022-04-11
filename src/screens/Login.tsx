@@ -3,6 +3,7 @@ import {
   faInstagram,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -62,6 +63,7 @@ const BottomBox = styled(WhiteBox)`
   text-align: center;
   a {
     font-weight: 600;
+    margin-left: 5px;
     color: ${(props) => props.theme.accent};
   }
 `;
@@ -93,7 +95,7 @@ const Separator = styled.div`
 
 const FacebookLogin = styled.div`
   color: #385285;
-  span: {
+  span {
     margin-left: 10px;
     font-weight: 600;
   }
@@ -124,7 +126,7 @@ const Login = () => {
         </TopBox>
         <BottomBox>
           <span>Don't have an account?</span>
-          <a href="#">Sign up</a>
+          <Link to="/sign-up">Sign up</Link>
         </BottomBox>
       </Wrapper>
     </Container>

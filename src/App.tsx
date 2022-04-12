@@ -1,4 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
+import { HelmetProvider } from 'react-helmet-async';
 import {
   BrowserRouter as Router,
   Route,
@@ -27,19 +28,21 @@ function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const isDarkMode = useReactiveVar(darkModeVar);
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-      <GlobalStyles />
-      <Container floating={true}>
-        <Router>
-          <Routes>
-            <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
-            <Route path="/sign-up" element={isLoggedIn ? null : <SignUp />} />
-            <Route element={<NotFound />} />
-            <Route path="*" element={<Navigate to="/" />}></Route>
-          </Routes>
-        </Router>
-      </Container>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <GlobalStyles />
+        <Container floating={true}>
+          <Router>
+            <Routes>
+              <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
+              <Route path="/sign-up" element={isLoggedIn ? null : <SignUp />} />
+              <Route element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/" />}></Route>
+            </Routes>
+          </Router>
+        </Container>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 

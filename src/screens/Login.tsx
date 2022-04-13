@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { handleLogin } from '../apollo';
 import AuthLayout from '../components/auth/AuthLayout';
 import BottomBox from '../components/auth/BottomBox';
 import Button from '../components/auth/Button';
@@ -46,16 +47,20 @@ const Login = () => {
     handleSubmit,
     getValues,
     setError,
-    formState: { errors, isValid },
+    clearErrors,
+    formState: { errors, isValid, isDirty },
   } = useForm<FormInputs>({
     mode: 'onChange',
   });
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted: ({ login: { ok, error, token } }) => {
       if (!ok) {
-        setError('loginResult', {
+        return setError('loginResult', {
           message: error,
         });
+      }
+      if (token) {
+        handleLogin(token);
       }
     },
   });
@@ -72,6 +77,8 @@ const Login = () => {
     });
   };
 
+  const clearLoginError = () => clearErrors('loginResult');
+
   return (
     <AuthLayout>
       <PageTitle title=" Login" />
@@ -87,6 +94,7 @@ const Login = () => {
                 value: 5,
                 message: 'Username should be longer than 5 characters.',
               },
+              onChange: clearLoginError,
             })}
             name="username"
             type="text"
@@ -95,7 +103,10 @@ const Login = () => {
           />
           <FormError message={errors?.username?.message} />
           <Input
-            {...register('password', { required: 'Password is required.' })}
+            {...register('password', {
+              required: 'Password is required.',
+              onChange: clearLoginError,
+            })}
             name="password"
             type="password"
             placeholder="Password"
@@ -105,7 +116,7 @@ const Login = () => {
           <Button
             type="submit"
             value={loading ? 'Loading... ' : 'Log in'}
-            disabled={!isValid || loading}
+            disabled={!isValid || loading || !isDirty}
           />
           <FormError message={errors?.loginResult?.message} />
         </form>

@@ -1,6 +1,21 @@
 import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
 
-export const isLoggedInVar = makeVar(false);
+const TOKEN: string = 'token';
+
+export const isLoggedInVar = makeVar<boolean>(
+  Boolean(localStorage.getItem(TOKEN)),
+);
+
+export const handleLogin = (token: string): void => {
+  localStorage.setItem(TOKEN, token);
+  isLoggedInVar(true);
+};
+
+export const handleLogout = (): void => {
+  localStorage.removeItem(TOKEN);
+  isLoggedInVar(false);
+};
+
 export const darkModeVar = makeVar(false);
 export const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',

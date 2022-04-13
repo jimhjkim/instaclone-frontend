@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
 const Container = styled.div`
   display: flex;
   height: 100vh;
@@ -13,16 +17,12 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const AuthLayout = ({ children }: Props) => {
+const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
     <Container>
       <Wrapper>{children}</Wrapper>
     </Container>
   );
-};
-
-type Props = {
-  children: React.ReactNode;
 };
 
 export default AuthLayout;

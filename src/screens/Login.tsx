@@ -3,15 +3,22 @@ import {
   faInstagram,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import AuthLayout from '../components/auth/AuthLayout';
 import BottomBox from '../components/auth/BottomBox';
 import Button from '../components/auth/Button';
 import FormBox from '../components/auth/FormBox';
+import FormError from '../components/auth/FormError';
 import Input from '../components/auth/Input';
 import Separator from '../components/auth/Separator';
 import PageTitle from '../components/PageTitle';
 import routes from '../routes';
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -22,17 +29,46 @@ const FacebookLogin = styled.div`
 `;
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
+  const onSubmitValid = (data: any) => {};
+
   return (
     <AuthLayout>
-      <PageTitle title="Login" />
+      <PageTitle title=" Login" />
       <FormBox>
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
-        <form>
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
-          <Button type="submit" value="Log in" />
+        <form onSubmit={handleSubmit(onSubmitValid)}>
+          <Input
+            {...register('username', {
+              required: 'Username is required.',
+              minLength: {
+                value: 5,
+                message: 'Username should be longer than 5 characters.',
+              },
+            })}
+            name="username"
+            type="text"
+            placeholder="Username"
+            hasError={Boolean(errors?.username?.message)}
+          />
+          <FormError message={errors?.username?.message} />
+          <Input
+            {...register('password', { required: 'Password is required.' })}
+            name="password"
+            type="password"
+            placeholder="Password"
+            hasError={Boolean(errors?.password?.message)}
+          />
+          <FormError message={errors?.password?.message} />
+          <Button type="submit" value="Log in" disabled={!isValid} />
         </form>
         <Separator />
         <FacebookLogin>

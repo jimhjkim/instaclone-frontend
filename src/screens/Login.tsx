@@ -64,7 +64,7 @@ const Login = () => {
       }
     },
   });
-  const onSubmitValid = (data: any) => {
+  const onSubmitValid = () => {
     if (loading) {
       return;
     }

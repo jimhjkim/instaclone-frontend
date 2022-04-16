@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
+import { Location, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { handleLogin } from '../apollo';
 import AuthLayout from '../components/auth/AuthLayout';
@@ -21,6 +22,10 @@ interface FormInputs {
   username: string;
   password: string;
   loginResult?: string;
+}
+
+interface LocationState {
+  message?: string;
 }
 
 const FacebookLogin = styled.div`
@@ -42,6 +47,8 @@ const LOGIN_MUTATION = gql`
 `;
 
 const Login = () => {
+  const location: Location = useLocation();
+  const state = location.state as LocationState;
   const {
     register,
     handleSubmit,
@@ -86,6 +93,7 @@ const Login = () => {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
+        {state?.message}
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             {...register('username', {

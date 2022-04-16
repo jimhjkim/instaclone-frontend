@@ -67,7 +67,9 @@ const SignUp = () => {
           message: error,
         });
       }
-      navigate(routes.home);
+      navigate(routes.home, {
+        state: { message: 'Account created. Please log in.', replace: true },
+      });
     },
   });
   const {

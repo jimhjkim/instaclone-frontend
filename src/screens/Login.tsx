@@ -26,6 +26,8 @@ interface FormInputs {
 
 interface LocationState {
   message?: string;
+  username?: string;
+  password?: string;
 }
 
 const FacebookLogin = styled.div`
@@ -34,6 +36,10 @@ const FacebookLogin = styled.div`
     margin-left: 10px;
     font-weight: 600;
   }
+`;
+
+const Notification = styled.div`
+  color: #2ecc71;
 `;
 
 const LOGIN_MUTATION = gql`
@@ -58,6 +64,10 @@ const Login = () => {
     formState: { errors, isValid, isDirty },
   } = useForm<FormInputs>({
     mode: 'onChange',
+    defaultValues: {
+      username: state?.username || '',
+      password: state?.password || '',
+    },
   });
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted: ({ login: { ok, error, token } }) => {
@@ -93,7 +103,7 @@ const Login = () => {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
-        {state?.message}
+        <Notification>{state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             {...register('username', {

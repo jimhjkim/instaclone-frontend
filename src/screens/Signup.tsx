@@ -62,13 +62,19 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT_MUTATION, {
     onCompleted: ({ createAccount: { ok, error } }) => {
+      const { username, password } = getValues();
       if (!ok) {
         return setError('createAccountResult', {
           message: error,
         });
       }
       navigate(routes.home, {
-        state: { message: 'Account created. Please log in.', replace: true },
+        state: {
+          replace: true,
+          message: 'Account created. Please log in.',
+          username,
+          password,
+        },
       });
     },
   });
@@ -84,9 +90,9 @@ const SignUp = () => {
     if (loading) {
       return;
     }
-    const data = getValues();
+    const { firstName, lastName, username, email, password } = getValues();
     createAccount({
-      variables: { ...data },
+      variables: { firstName, lastName, username, email, password },
     });
   };
   const clearCreateAccountError = () => clearErrors('createAccountResult');
@@ -114,7 +120,7 @@ const SignUp = () => {
           />
           <FormError message={errors?.firstName?.message} />
           <Input
-            {...(register('lastName'), { onChange: clearCreateAccountError })}
+            {...register('lastName', { onChange: clearCreateAccountError })}
             name="lastName"
             type="text"
             placeholder="Last Name"

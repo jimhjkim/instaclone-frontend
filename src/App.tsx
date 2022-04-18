@@ -12,7 +12,8 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import NotFound from './screens/NotFound';
 import SignUp from './screens/SignUp';
-import { darkTheme, GlobalStyles, lightTheme } from './styles';
+import GlobalStyles from './styles';
+import { darkTheme, lightTheme } from './themes';
 
 interface IContainerProps {
   floating: boolean;
